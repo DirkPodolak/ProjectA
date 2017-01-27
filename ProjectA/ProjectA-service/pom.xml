@@ -39,41 +39,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
-            <plugin>
-
-                <!-- see http://jeremylong.github.io/DependencyCheck/dependency-check-maven/configuration.html -->
-
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>1.4.5</version>
-
-                <!-- FIXME: diese Konfiguration wird vom Plugin nicht angezogen, ich weiß noch nicht, warum.
-                     Für den Moment bleibe ich bei mvn -D Parametern im Jenkinsfile. -->
-                <configuration>
-                    <cveValidForHours>24</cveValidForHours> <!-- number of hours to wait before checking for new updates from the NVD -->
-                    <failBuildOnCVSS>5</failBuildOnCVSS> <!-- severity level of CVE to break the build (range 0 - 10) -->
-                    <failBuildOnAnyVulnerability>false</failBuildOnAnyVulnerability> <!-- fail on anything -->
-                    <format>XML</format> <!-- report output format [HTML, XML, VULN, ALL] -->
-                    <name>ProjectA</name> <!-- report name -->
-                    <outputDirectory>target</outputDirectory> <!-- report output directory -->
-                    <!-- <suppressionFile>suppression</suppressionFile> --> <!-- path to suppression file to handle false positives -->
-                    <!-- <hintsFile>suppression</hintsFile> --> <!-- path to hints file to handle false negatives -->
-
-                    <cveUrl12Modified>http://coreos-artifactory:8081/artifactory/nvd-download/nvdcve-Modified.xml.gz</cveUrl12Modified>
-                    <cveUrl20Modified>http://coreos-artifactory:8081/artifactory/nvd-feeds/nvdcve-2.0-Modified.xml.gz</cveUrl20Modified>
-                    <cveUrl12Base>http://coreos-artifactory:8081/artifactory/nvd-download/nvdcve-%d.xml.gz</cveUrl12Base>
-                    <cveUrl20Base>http://coreos-artifactory:8081/artifactory/nvd-feeds/nvdcve-2.0-%d.xml.gz</cveUrl20Base>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
