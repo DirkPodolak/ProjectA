@@ -1,0 +1,26 @@
+// Mark the code build 'stage'....
+stage ('Build') {
+    // Run the maven build
+    sh "/usr/bin/mvn -f ProjectA/pom.xml clean compile"
+}
+
+stage ('Test') {
+    // Run the maven build
+    try {
+        sh "/usr/bin/mvn -f ProjectA/pom.xml test"
+    } finally {
+        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
+    }
+}
+
+stage ('DependencyCheck') {
+    sh "/usr/bin/mvn -f ProjectA/pom.xml org.owasp:dependency-check-maven:1.4.5:purge"
+    //sh "/usr/bin/mvn -f ProjectA/pom.xml org.owasp:dependency-check-maven:1.4.5:check -DcveUrl12Modified=http://coreos-artifactory:8081/artifactory/nvd-download/nvdcve-Modified.xml.gz -DcveUrl20Modified=http://coreos-artifactory:8081/artifactory/nvd-feeds/nvdcve-2.0-Modified.xml.gz -DcveUrl12Base=http://coreos-artifactory:8081/artifactory/nvd-download/nvdcve-%d.xml.gz -DcveUrl20Base=http://coreos-artifactory:8081/artifactory/nvd-feeds/nvdcve-2.0-%d.xml.gz"
+}
+
+stage('SonarQube analysis') {
+    withSonarQubeEnv('SonarQube-Productive') {
+        // requires SonarQube Scanner for Maven 3.2+
+        sh "/usr/bin/mvn -e -Dsonar.branch=${BRANCH_NAME} -f ProjectA/pom.xml sonar:sonar"
+    }
+}
